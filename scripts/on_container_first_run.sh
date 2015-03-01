@@ -1,8 +1,16 @@
 #!/bin/bash -xe
+
 sysctl -w kernel.shmmax=17179869184
-/opt/chef-server/embedded/bin/runsvdir-start &
-/usr/local/bin/reconfigure_chef.sh
 hostname=`hostname`
+
+mkdir -p /var/opt/chef-server/nginx/etc/
+mkdir -p /etc/chef-server/
+
+if [ -z "$CHEF_PORT"  ]; then 
+    # set default
+    CHEF_PORT="443"
+fi
+
 cat > /var/opt/chef-server/nginx/etc/chef_https_lb.conf << EOL
 server {
   listen $CHEF_PORT;
@@ -42,6 +50,8 @@ server {
     deny all;
     }
 
+  # added after chef server installation, to make keys
+  # available through curl -Ok https://IP:CHEF_PORT/knife_admin_key.tar.gz
   location /knife_admin_key.tar.gz {
     default_type application/zip;
     alias /etc/chef-server/knife_admin_key.tar.gz;
@@ -93,11 +103,14 @@ server {
   }
 }
 EOL
-cd /etc/chef-server/ && tar -cvzf knife_admin_key.tar.gz admin.pem chef-validator.pem
 cat > /etc/chef-server/chef-server.rb << EOL
 nginx['ssl_port'] = $CHEF_PORT
 EOL
-chef-server-ctl restart nginx
-chef-server-ctl status >> /root/out.txt
-echo "Done!" >> /root/out.txt
-tail -F /opt/chef-server/embedded/service/*/log/current
+
+chef-server-ctl reconfigure
+# is not the next command involved in the previous one?
+chef-server-ctl restart nginx 
+
+LOG_FILE="/var/log/chef_first_run.log"
+touch $LOG_FILE
+chef-server-ctl status >> $LOG_FILE

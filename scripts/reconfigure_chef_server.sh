@@ -7,6 +7,7 @@ SECONDS=0
 TIMEOUT=60
 
 touch $LOG_FILE
+# invokes chef client
 chef-server-ctl reconfigure | tee $LOG_FILE
 return=`curl -sf ${URL}`
 
