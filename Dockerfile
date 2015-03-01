@@ -1,20 +1,10 @@
-FROM ubuntu:14.04
-MAINTAINER Clement Buisson <clement.buisson@gmail.com>
-#This is a fork of base/chef-server
+FROM debian:7.5
+MAINTAINER Ewa Czechowska <ewa@ai-traders.com>
 
-RUN apt-get update
-ENV DEBIAN_FRONTEND noninteractive
+RUN mkdir /scripts
+# do not add any comments after ADD or COPY or you get: "no such file or directory"
+COPY scripts /scripts 
+RUN /scripts/install_chef_server.sh && mv /scripts/image_metadata.txt /etc/docker_image_metadata.txt && /scripts/cleanup.sh
 
-RUN apt-get install -yq wget curl
-RUN wget --content-disposition "http://www.opscode.com/chef/download-server?p=ubuntu&pv=12.04&m=x86_64&v=latest&prerelease=false&nightlies=false"
-RUN dpkg -i chef-server*.deb
+RUN dpkg-divert --local --rename --add /sbin/initctl && ln -sf /bin/true /sbin/initctl
 
-RUN dpkg-divert --local --rename --add /sbin/initctl
-RUN ln -sf /bin/true /sbin/initctl
-
-ADD reconfigure_chef.sh /usr/local/bin/
-ADD run.sh /usr/local/bin/
-CMD rsyslogd -n
-VOLUME /root/
-VOLUME /var/log
-CMD ["run.sh"]

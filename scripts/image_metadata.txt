@@ -1,0 +1,2 @@
+image_name = chef_server:0.0.1
+git_repository = chef-server
