@@ -1,29 +1,12 @@
 # chef-server
 
-chef-server is running Chef server 11 on an Ubuntu Trusty 14.04 LTS
+chef-server is running Chef server 11.1.6-1_amd64 on an Ubuntu Trusty 14.04 LTS
 
-This is a fork of: [base/chef-server](https://registry.hub.docker.com/u/base/chef-server/).
-
-## Environment
-Chef is running over HTTPS/443 by default. You can however change that to another port by updating the `CHEF_PORT` variable and the expose port `-p`.
+This is a fork of: [c-buisson/chef-server](https://github.com/c-buisson/chef-server) but I took run_chef_server.sh from [tmc/dockerfiles](https://github.com/tmc/dockerfiles/tree/master/chef-server).
 
 ## Usage
-*With log output:*
-
 ```
-$ docker run --privileged -e CHEF_PORT=443 --name chef-server -d -v ~/chef-logs:/var/log -v ~/install-chef-out:/root -p 443:443 cbuisson/chef-server
+$ docker run --privileged --name chef_server -d -p 443:443 xmik/chef_server:0.0.1
 ```
 
-*Just the container:*
 
-```
-$ docker run --privileged -e CHEF_PORT=443 --name chef-server -d -p 443:443 cbuisson/chef-server
-```
-
-Once the Chef server is configured, you can download the Knife admin keys here:
-
-```
-$ curl -Ok https://IP:CHEF_PORT/knife_admin_key.tar.gz
-```
-
-Then un-tar that archive and point your knife.rb to the `admin.pem` and `chef-validator.pem` files.

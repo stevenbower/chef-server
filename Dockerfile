@@ -10,7 +10,6 @@ COPY scripts /scripts
 RUN /scripts/install_chef_server.sh && mv /scripts/image_metadata.txt /etc/docker_image_metadata.txt && /scripts/cleanup.sh
 
 
-
 EXPOSE 443
 ENTRYPOINT ["/bin/bash", "-c"]
 CMD ["/usr/bin/run_chef_server.sh"]
