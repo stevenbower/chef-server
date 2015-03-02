@@ -5,8 +5,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y wget  # https://github.com/doc
 
 # choose from: https://www.chef.io/download-open-source-chef-server-11/
 # latest: www.opscode.com/chef/download-server?p=ubuntu&pv=12.04&m=x86_64&v=latest&prerelease=false&nightlies=false
-#cd /tmp && wget --content-disposition "http://www.opscode.com/chef/download-server?p=ubuntu&pv=12.04&m=x86_64&v=latest&prerelease=false&nightlies=false"
-cd /tmp && wget --content-disposition "http://archive.ai-traders.com/lab/1.0/cookbooks/ai_chef_server/files/chef-server_11.1.6-1_amd64.deb"
+cd /tmp && wget --content-disposition "http://www.opscode.com/chef/download-server?p=ubuntu&pv=12.04&m=x86_64&v=latest&prerelease=false&nightlies=false"
 dpkg -i /tmp/chef-server*.deb
 
 # Those demand --privileged option and currently `docker build` does not 
