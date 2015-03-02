@@ -10,8 +10,8 @@ cd /tmp && wget --content-disposition "http://archive.ai-traders.com/lab/1.0/coo
 dpkg -i /tmp/chef-server*.deb
 
 sysctl -w kernel.shmmax=17179869184
-#/opt/chef-server/embedded/bin/runsvdir-start & # same as chef-server-ctl start but blocking (without '&')?
-chef-server-ctl start
+/opt/chef-server/embedded/bin/runsvdir-start & 
+# maybe '/opt/chef-server/embedded/bin/runsvdir-start &' is the same as 'chef-server-ctl start', but 'docker build' fails with 'chef-server-ctl start'
 # configure now as much as possible
 chef-server-ctl reconfigure
 

@@ -2,6 +2,8 @@
 namespace 'chef_server' do
   
   task :build do
+
+    # read image name from file
     image_name = String.new()
     File.open('./scripts/image_metadata.txt','r')do |f|
       # file is opened
@@ -13,7 +15,12 @@ namespace 'chef_server' do
         end
       end
     end
-    Rake.sh("docker build -t #{image_name} .")
+    begin
+      Rake.sh("docker build -t #{image_name} .")
+    rescue Exception => ex
+      # catch any Exception (including StandardError)
+      fail "Failed to build docker image, error: #{ex.message}"      
+    end
   end
 
 end
