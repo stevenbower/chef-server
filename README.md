@@ -7,8 +7,9 @@ This is a fork of: [c-buisson/chef-server](https://github.com/c-buisson/chef-ser
 I forked it in order to avoid chef reconfiguring on each container restart. For me it kept reconfiguring endlessly. 
 
 ## Usage
+Without the --privileged the shared memory max cannot be set and some of chef server components may not start.  
 ```
-$ docker run --privileged --name chef_server -d -p 443:443 xmik/chef_server:0.0.1
+$ docker run --privileged --name chef_server -dti -p 443:443 xmik/chef_server:0.0.1
 ```
 
 ## Build
